@@ -1,0 +1,374 @@
+#include<stdio.h>
+#include<conio.h>
+#include<stdlib.h>
+
+int c;
+struct shopping
+{
+    int p_price, p_qty,p_no;
+    char p_name[30];
+}shop;
+
+void insert()
+{
+    FILE *fp;
+    fp = fopen("Record.txt","a");
+    //disp();
+    printf("\nEnter the Product Number :- ");
+    scanf("%d",&shop.p_no);
+    printf("\nEnter the Product Name :- ");
+    scanf("%s", &shop.p_name);
+    printf("\nEnter the Product QTY :- ");
+    scanf("%d", &shop.p_qty);
+    printf("\nEnter the Product Price :- ");
+    scanf("%d", &shop.p_price);
+    fwrite(&shop, sizeof(shop), 1, fp);
+    fclose(fp);
+    disp();
+    do
+        {
+            printf("\n\nSelect Option for Create your own list");
+            printf("\n\t1. Add Item Name, Item Qty, Item, Price");
+            printf("\n\t2. Update(replace)");
+            printf("\n\t3. Delete Item");
+
+            printf("\n\nSELECT ANY ONE OPTION TO MAKE A LIST : ");
+            scanf("%d", &c);
+            switch (c)
+            {
+                case 1:
+                    insert();
+                    break;
+                case 2:
+                    update();
+                    break;
+                case 3:
+                    deletefile();
+                    break;
+                default:
+                    printf("\nYour choice is wrong\nPlease try again...\n");
+                    break;
+
+            }
+        } while (c != 4);
+
+}
+
+void disp()
+{
+     FILE *fp1;
+     fp1 = fopen("Record.txt", "r");
+     printf(" \nS.no\tProduct Name\t\tQTY\tPrice\n\n");
+     while (fread(&shop, sizeof(shop), 1, fp1))
+     printf(" %d\t%s\t\t%d\t%d\n", shop.p_no ,shop.p_name, shop.p_qty, shop.p_price);
+     fclose(fp1);
+}
+
+void newlist()
+{
+    FILE *fpo;
+    FILE *fpt;
+    int i, s;
+    //printf("Enter the Product Number you want to delete :");
+    //scanf("%d", &r);
+    for(i=0;i<=1000;i++)
+    {
+        if (avlpno(i) == 0)
+        {
+            NULL;
+        }
+        //printf("Product Number %d is not available in the file\n", i);
+        else
+            {
+            fpo = fopen("Record.txt", "r");
+            fpt = fopen("TempFile.txt", "w");
+            while (fread(&shop, sizeof(shop), 1, fpo))
+                {
+                s = shop.p_no;
+                if (s != i)
+                fwrite(&shop, sizeof(shop), 1, fpt);
+                }
+            fclose(fpo);
+            fclose(fpt);
+            fpo = fopen("Record.txt", "w");
+            fpt = fopen("TempFile.txt", "r");
+            while (fread(&shop, sizeof(shop), 1, fpt))
+            fwrite(&shop, sizeof(shop), 1, fpo);
+            //printf("\nRECORD DELETED\n");
+            fclose(fpo);
+            fclose(fpt);
+            }
+    }
+    do
+        {
+            printf("\n\nSelect Option for Create your own list");
+            printf("\n\t1. Add Item Name, Item Qty, Item, Price");
+            printf("\n\t2. Update(replace)");
+            printf("\n\t3. Delete Item");
+
+            printf("\n\nSELECT ANY ONE OPTION TO MAKE A LIST : ");
+            scanf("%d", &c);
+            switch (c)
+            {
+                case 1:
+                    insert();
+                    break;
+                case 2:
+                    update();
+                    break;
+                case 3:
+                    deletefile();
+                    break;
+                default:
+                    printf("\nYour choice is wrong\nPlease try again...\n");
+                    break;
+
+            }
+        } while (c != 4);
+
+}
+
+void deletefile()
+{
+    FILE *fpo;
+    FILE *fpt;
+    int r, s;
+    printf("Enter the Product Number you want to delete :");
+    scanf("%d", &r);
+    if (avlpno(r) == 0)
+    printf("Product Number %d is not available in the file\n", r);
+    else
+        {
+        fpo = fopen("Record.txt", "r");
+        fpt = fopen("TempFile.txt", "w");
+        while (fread(&shop, sizeof(shop), 1, fpo))
+            {
+            s = shop.p_no;
+            if (s != r)
+            fwrite(&shop, sizeof(shop), 1, fpt);
+            }
+        fclose(fpo);
+        fclose(fpt);
+        fpo = fopen("Record.txt", "w");
+        fpt = fopen("TempFile.txt", "r");
+        while (fread(&shop, sizeof(shop), 1, fpt))
+        fwrite(&shop, sizeof(shop), 1, fpo);
+        printf("\nRECORD DELETED\n");
+        fclose(fpo);
+        fclose(fpt);
+        }
+    disp();
+    do
+        {
+            printf("\n\nSelect Option for Create your own list");
+            printf("\n\t1. Add Item Name, Item Qty, Item, Price");
+            printf("\n\t2. Update(replace)");
+            printf("\n\t3. Delete Item");
+
+            printf("\n\nSELECT ANY ONE OPTION TO MAKE A LIST : ");
+            scanf("%d", &c);
+            switch (c)
+            {
+                case 1:
+                    insert();
+                    break;
+                case 2:
+                    update();
+                    break;
+                case 3:
+                    deletefile();
+                    break;
+                default:
+                    printf("\nYour choice is wrong\nPlease try again...\n");
+                    break;
+
+            }
+        } while (c != 4);
+
+}
+
+
+void update()
+{
+ int avl;
+ FILE *fpt;
+ FILE *fpo;
+ int s, r, ch;
+ printf("Enter Product Number to update:");
+ scanf("%d", &r);
+ avl = avlpno(r);
+ if (avl == 0)
+ {
+    printf("Product Number %d is not Available in the file", r);
+ }
+ else
+ {
+      fpo = fopen("Record.txt", "r");
+      fpt = fopen("TempFile.txt", "w");
+      while (fread(&shop, sizeof(shop), 1, fpo))
+      {
+           s = shop.p_no;
+           if (s != r)
+            fwrite(&shop, sizeof(shop), 1, fpt);
+           else
+           {
+                printf("\n\t1. Update Product Name of Product Number %d", r);
+                printf("\n\t2. Update Price of Product Number %d", r);
+                printf("\n\t3. Update Qty of Product Number %d", r);
+                printf("\n\t4. Update Product Name, Price and QTY of Roll Number %d", r);
+                printf("\nEnter your choice:");
+                scanf("%d", &ch);
+                switch (ch)
+                {
+                    case 1:
+                         printf("Enter Product Name:");
+                         scanf("%s", &shop.p_name);
+                     break;
+                    case 2:
+                         printf("Enter Mark : ");
+                         scanf("%d", &shop.p_price);
+                     break;
+                    case 3:
+                         printf("Enter QTY : ");
+                         scanf("%d", &shop.p_qty);
+                         break;
+                    case 4:
+                         printf("Enter Product Name: ");
+                         scanf("%s", &shop.p_name);
+                         printf("Enter Price : ");
+                         scanf("%d", &shop.p_price);
+                         printf("Enter QTY : ");
+                         scanf("%d", shop.p_qty);
+                     break;
+                     default:
+                     printf("Invalid Selection");
+                     break;
+                }
+                fwrite(&shop, sizeof(shop), 1, fpt);
+           }
+      }
+      fclose(fpo);
+      fclose(fpt);
+      fpo = fopen("Record.txt", "w");
+      fpt = fopen("TempFile.txt", "r");
+      while (fread(&shop, sizeof(shop), 1, fpt))
+      {
+        fwrite(&shop, sizeof(shop), 1, fpo);
+      }
+      fclose(fpo);
+      fclose(fpt);
+      printf("RECORD UPDATED");
+ }
+ disp();
+    do
+        {
+            printf("\n\nSelect Option for Create your own list");
+            printf("\n\t1. Add Item Name, Item Qty, Item, Price");
+            printf("\n\t2. Update(replace)");
+            printf("\n\t3. Delete Item");
+
+            printf("\n\nSELECT ANY ONE OPTION TO MAKE A LIST : ");
+            scanf("%d", &c);
+            switch (c)
+            {
+                case 1:
+                    insert();
+                    break;
+                case 2:
+                    update();
+                    break;
+                case 3:
+                    deletefile();
+                    break;
+                default:
+                    printf("\nYour choice is wrong\nPlease try again...\n");
+                    break;
+
+            }
+        } while (c != 4);
+
+}
+
+int avlpno(int pno)
+{
+     FILE *fp;
+     int c = 0;
+     fp = fopen("Record.txt", "r");
+     while (!feof(fp))
+         {
+          fread(&shop, sizeof(shop), 1, fp);
+
+          if (pno == shop.p_no)
+          {
+           fclose(fp);
+           return 1;
+          }
+         }
+     fclose(fp);
+     return 0;
+}
+
+int empty()
+{
+ int c = 0;
+ FILE *fp;
+ fp = fopen("Record.txt", "r");
+ while (fread(&shop, sizeof(shop), 1, fp))
+  c = 1;
+ fclose(fp);
+ return c;
+}
+
+
+void main()
+{
+ int c, emp, ch, ch1;
+
+  printf("\n------------------------------------------\n");
+  printf("Welcome to Your Shopping Solution\n\n");
+  printf("\n\t1. Default List");
+  printf("\n\t2. New List");
+  printf("\n\n------------------------------------------\n");
+
+  printf("\n\nSELECT ANY ONE OPTION TO MAKE A LIST : ");
+  scanf("%d", &ch);
+  if (ch == 1)
+  {
+        do
+        {
+            printf("\n\t********** Default List **********\n\n");
+            disp();
+            printf("\n\nSelect Option for Create your own list");
+            printf("\n\t1. Add Item Name, Item Qty, Item, Price");
+            printf("\n\t2. Update(replace)");
+            printf("\n\t3. Delete Item");
+
+            printf("\n\nSELECT ANY ONE OPTION TO MAKE A LIST : ");
+            scanf("%d", &c);
+            switch (c)
+            {
+                case 1:
+                    insert();
+                    break;
+                case 2:
+                    update();
+                    break;
+                case 3:
+                    deletefile();
+                    break;
+                case 4:
+                    newlist();
+                    break;
+                default:
+                    printf("\nYour choice is wrong\nPlease try again...\n");
+                    break;
+
+            }
+        } while (c != 4);
+  }
+  else
+  {
+      newlist();
+  }
+
+}
